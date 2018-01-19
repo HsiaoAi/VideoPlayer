@@ -1,0 +1,18 @@
+disabled_rules:
+- line_length
+- file_length
+- function_body_length
+- syntactic_sugar
+- large_tuple
+- cyclomatic_complexity
+
+excluded:
+
+- Pods/
+- Library/SweetAlert.swift
+- iPetMatch/CardView
+
+identifier_name:
+    excluded:
+        - id
+
