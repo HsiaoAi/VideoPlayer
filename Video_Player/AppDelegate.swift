@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+
         // Setup rootViewController
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
@@ -23,11 +23,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let navigationViewController = UINavigationController(rootViewController: viewController)
         UINavigationBar.appearance().barStyle = .blackOpaque
         window?.rootViewController = navigationViewController
-        
+
         // Setup IQKeyboard
         IQKeyboardManager.sharedManager().enable = true
-        
+
         return true
     }
-    
+
 }
