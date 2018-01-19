@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Foundation
 
 class ViewController: UIViewController {
 
@@ -27,7 +28,7 @@ class ViewController: UIViewController {
         button.tintColor = .white
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
-        button.addTarget(self, action: #selector(playVideo), for: .touchUpInside)
+        button.addTarget(self, action: #selector(tapPlayButton), for: .touchUpInside)
         return button
     }()
 
@@ -50,6 +51,7 @@ class ViewController: UIViewController {
 
     lazy var player: AVPlayer = {
         let player = AVPlayer()
+        // player.addObserver(self, forKeyPath: "rate", options: [], context: nil)
         return player
     }()
 
@@ -59,7 +61,7 @@ class ViewController: UIViewController {
     }()
 
     lazy var videoURL: String = {
-        let url = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+        let url = ""
         return url
     }()
 
@@ -72,19 +74,31 @@ class ViewController: UIViewController {
         }
     }
 
+    var isPlaying = false {
+
+        didSet {
+            let playButtonTitle = isPlaying ? "Pause" : "Play"
+            self.playbutton.setTitle(playButtonTitle, for: .normal)
+        }
+
+    }
+
     // View Life cycles
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupSearchBar()
         setupNavigationBar()
+
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.player.addObserver(self, forKeyPath: "status", options: .new, context: nil)
     }
 
     func setupUI() {
+        displayView.backgroundColor = .clear
         view.backgroundColor = UIColor(red: 8 / 255.0, green: 21 / 255.0, blue: 35 / 255.0, alpha: 1.0)
         self.view.addSubview(buttonsPanelView)
         self.view.addSubview(playbutton)
@@ -100,7 +114,7 @@ class ViewController: UIViewController {
     }
 
     func setupSearchBar() {
-        // ToDo palceholder text style
+        searchBar.tintColor = .white
         searchBar.sizeToFit()
         searchBar.searchBarStyle = .prominent
         searchBar.placeholder = NSLocalizedString("Enter URL of video", comment: "")
@@ -116,37 +130,94 @@ class ViewController: UIViewController {
         return UIStatusBarStyle.lightContent
     }
 
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+
+        guard let keyPath = keyPath,
+            let item = object as? AVPlayerItem else { return }
+
+        if keyPath == #keyPath(AVPlayerItem.status) {
+            switch item.status {
+
+            case .readyToPlay:
+
+                self.player.play()
+
+            case .failed:
+                print("Failed")
+
+            default:
+                break
+
+            }
+        }
+
+    }
+
 }
 
 extension ViewController: UISearchBarDelegate {
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.searchBar.endEditing(true)
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+    }
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchVideo()
+
     }
 
     func searchVideo() {
 
+        guard let text = searchBar.text,
+        !text.isEmpty else { return }
+        self.videoURL = searchBar.text!
+        prepareForPlayingVideo()
+        self.searchBar.text = ""
+
+    }
+
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+
+        searchBar.text = ""
+        searchBar.showsCancelButton = false
+        self.searchBar.endEditing(true)
+
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.searchBar.endEditing(true)
     }
 }
 
 extension ViewController {
     // Video play related functions
-    @objc func playVideo() {
 
-        let url = self.videoURL
-        self.player = AVPlayer(url: URL(string: url)!)
+    func prepareForPlayingVideo() {
+
+        isPlaying = true
+        let playItem = AVPlayerItem(url: URL(string: self.videoURL)!)
+        playItem.addObserver(self, forKeyPath: #keyPath(AVPlayerItem.status), options: .new, context: nil)
+        self.player = AVPlayer(playerItem: playItem)
         self.playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = self.displayView.bounds
         playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
         self.view.bringSubview(toFront: displayView)
         self.displayView.layer.addSublayer(playerLayer)
-        player.play()
 
     }
 
     @objc func switchMuteMode() {
-
         self.isMute = self.isMute ? false : true
+    }
 
+    @objc func tapPlayButton() {
+
+        self.isPlaying = self.isPlaying ? false : true
+        if isPlaying {
+            self.player.play()
+        } else {
+            self.player.pause()
+        }
     }
 
 }
