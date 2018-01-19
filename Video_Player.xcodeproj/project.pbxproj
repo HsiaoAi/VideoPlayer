@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		876A31462011B8DB00FD6231 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876A31452011B8DB00FD6231 /* AppDelegate.swift */; };
 		876A31482011B8DB00FD6231 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876A31472011B8DB00FD6231 /* ViewController.swift */; };
-		876A314B2011B8DB00FD6231 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 876A31492011B8DB00FD6231 /* Main.storyboard */; };
 		876A314D2011B8DB00FD6231 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 876A314C2011B8DB00FD6231 /* Assets.xcassets */; };
 		876A31502011B8DB00FD6231 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 876A314E2011B8DB00FD6231 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -18,7 +17,6 @@
 		876A31422011B8DB00FD6231 /* Video_Player.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Video_Player.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		876A31452011B8DB00FD6231 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		876A31472011B8DB00FD6231 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		876A314A2011B8DB00FD6231 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		876A314C2011B8DB00FD6231 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		876A314F2011B8DB00FD6231 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		876A31512011B8DB00FD6231 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,7 +54,6 @@
 			children = (
 				876A31452011B8DB00FD6231 /* AppDelegate.swift */,
 				876A31472011B8DB00FD6231 /* ViewController.swift */,
-				876A31492011B8DB00FD6231 /* Main.storyboard */,
 				876A314C2011B8DB00FD6231 /* Assets.xcassets */,
 				876A314E2011B8DB00FD6231 /* LaunchScreen.storyboard */,
 				876A31512011B8DB00FD6231 /* Info.plist */,
@@ -74,6 +71,7 @@
 				876A313E2011B8DA00FD6231 /* Sources */,
 				876A313F2011B8DA00FD6231 /* Frameworks */,
 				876A31402011B8DA00FD6231 /* Resources */,
+				876A31572011BA7000FD6231 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -125,11 +123,26 @@
 			files = (
 				876A31502011B8DB00FD6231 /* LaunchScreen.storyboard in Resources */,
 				876A314D2011B8DB00FD6231 /* Assets.xcassets in Resources */,
-				876A314B2011B8DB00FD6231 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		876A31572011BA7000FD6231 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		876A313E2011B8DA00FD6231 /* Sources */ = {
@@ -144,14 +157,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		876A31492011B8DB00FD6231 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				876A314A2011B8DB00FD6231 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		876A314E2011B8DB00FD6231 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -277,6 +282,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DTTYHBEAZE;
 				INFOPLIST_FILE = Video_Player/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xleeif00.Video-Player";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -292,6 +298,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = DTTYHBEAZE;
 				INFOPLIST_FILE = Video_Player/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.xleeif00.Video-Player";
 				PRODUCT_NAME = "$(TARGET_NAME)";
