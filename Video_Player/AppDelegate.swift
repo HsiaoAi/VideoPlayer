@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         let viewController = ViewController()
         let navigationViewController = UINavigationController(rootViewController: viewController)
+        UINavigationBar.appearance().barStyle = .blackOpaque
         window?.rootViewController = navigationViewController
         
         // Setup IQKeyboard
