@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
 
@@ -30,7 +31,6 @@ class ViewController: UIViewController {
 
     lazy var mutebutton: UIButton = {
         let button = UIButton(frame: CGRect(x: 320, y: 636, width: 39, height: 19))
-        //let button = UIButton()
         button.tintColor = .white
         button.setTitle(NSLocalizedString("Mute", comment: ""), for: .normal)
         button.tintColor = .white
@@ -40,8 +40,18 @@ class ViewController: UIViewController {
 
     lazy var displayView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 64, width: 375, height: 559))
-        view.backgroundColor = .white
+        view.backgroundColor = .clear
         return view
+    }()
+    
+    lazy var player: AVPlayer = {
+        let player = AVPlayer()
+        return player
+    }()
+    
+    lazy var playerLayer: AVPlayerLayer = {
+        let playerLayer = AVPlayerLayer()
+        return playerLayer
     }()
 
     // View Life cycles
@@ -50,6 +60,11 @@ class ViewController: UIViewController {
         setupUI()
         setupSearchBar()
         setupNavigationBar()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        playVideo()
     }
 
     func setupUI() {
@@ -97,9 +112,25 @@ extension ViewController: UISearchBarDelegate {
 }
 
 extension ViewController {
+    // Video play related functions
+    func playVideo() {
+        
+        let url = "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8"
+        self.player = AVPlayer(url: URL(string: url)!)
+        self.playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = self.displayView.bounds
+        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspect
+        self.view.bringSubview(toFront: displayView)
+        self.displayView.layer.addSublayer(playerLayer)
+        player.play()
+
+    }
+}
+
+extension ViewController {
 
     override func viewWillLayoutSubviews() {
-
+        super.viewWillLayoutSubviews()
         buttonsPanelView.translatesAutoresizingMaskIntoConstraints = false
         buttonsPanelView.heightAnchor.constraint(equalToConstant: 44.0).isActive = true
         buttonsPanelView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
@@ -124,5 +155,10 @@ extension ViewController {
         displayView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         displayView.bottomAnchor.constraint(equalTo: buttonsPanelView.topAnchor).isActive = true
 
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.playerLayer.frame = self.displayView.bounds
     }
 }
