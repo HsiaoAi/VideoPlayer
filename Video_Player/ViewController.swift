@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import Foundation
+import SCLAlertView
 
 class ViewController: UIViewController {
 
@@ -24,7 +25,7 @@ class ViewController: UIViewController {
     lazy var playbutton: UIButton = {
         let button = UIButton(frame: CGRect(x: 20, y: 636, width: 100, height: 19))
         button.tintColor = .white
-        button.setTitle(PlayStatus.play.rawValue, for: .normal)
+        button.setTitle(NSLocalizedString("Play", comment: ""), for: .normal)
         button.tintColor = .white
         button.titleLabel?.textAlignment = .left
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
@@ -51,7 +52,6 @@ class ViewController: UIViewController {
 
     lazy var player: AVPlayer = {
         let player = AVPlayer()
-        // player.addObserver(self, forKeyPath: "rate", options: [], context: nil)
         return player
     }()
 
@@ -69,7 +69,7 @@ class ViewController: UIViewController {
     var isMute = false {
         didSet {
             self.player.isMuted = isMute
-            let muteButtonTitle = isMute ? "UnMute" : "Mute"
+            let muteButtonTitle = isMute ? NSLocalizedString("UnMute", comment: "") : NSLocalizedString("Mute", comment: "")
             self.mutebutton.setTitle(muteButtonTitle, for: .normal)
         }
     }
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     var isPlaying = false {
 
         didSet {
-            let playButtonTitle = isPlaying ? "Pause" : "Play"
+            let playButtonTitle = isPlaying ? NSLocalizedString("Pause", comment: "") : NSLocalizedString("Play", comment: "")
             self.playbutton.setTitle(playButtonTitle, for: .normal)
         }
 
@@ -95,6 +95,7 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.player.addObserver(self, forKeyPath: "status", options: .new, context: nil)
+        self.player.addObserver(self, forKeyPath: "rate", options: .new, context: nil)
     }
 
     func setupUI() {
@@ -136,14 +137,18 @@ class ViewController: UIViewController {
             let item = object as? AVPlayerItem else { return }
 
         if keyPath == #keyPath(AVPlayerItem.status) {
+
             switch item.status {
 
             case .readyToPlay:
-
                 self.player.play()
 
             case .failed:
-                print("Failed")
+
+                SCLAlertView().showError(
+                    NSLocalizedString("Error", comment: ""),
+                    subTitle: NSLocalizedString("Somthing wrong, please try again.", comment: "")
+                )
 
             default:
                 break
@@ -169,7 +174,12 @@ extension ViewController: UISearchBarDelegate {
     func searchVideo() {
 
         guard let text = searchBar.text,
-        !text.isEmpty else { return }
+        !text.isEmpty else {
+            SCLAlertView().showWarning(
+                NSLocalizedString("Warning", comment: ""),
+                subTitle: NSLocalizedString("Please enter content.", comment: "")
+            )
+            return }
         self.videoURL = searchBar.text!
         prepareForPlayingVideo()
         self.searchBar.text = ""

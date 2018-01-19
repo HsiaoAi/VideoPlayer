@@ -7,5 +7,6 @@ target 'Video_Player' do
 
   # Pods for Video_Player
   pod 'IQKeyboardManagerSwift'
+   pod 'SCLAlertView'
 
 end
