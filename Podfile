@@ -6,5 +6,6 @@ target 'Video_Player' do
   use_frameworks!
 
   # Pods for Video_Player
+  pod 'IQKeyboardManagerSwift'
 
 end

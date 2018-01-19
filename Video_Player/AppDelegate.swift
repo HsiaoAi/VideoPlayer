@@ -14,12 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Set rootViewController
+        
+        // Setup rootViewController
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         let viewController = ViewController()
         let navigationViewController = UINavigationController(rootViewController: viewController)
         window?.rootViewController = navigationViewController
+        
+        // Setup IQKeyboard
+        IQKeyboardManager.sharedManager().enable = true
+        
         return true
     }
     
